@@ -27,6 +27,13 @@ namespace android {
 namespace hardware {
 namespace details {
 
+// Legacy ABI declaration for vendor prebuilts that reference this data symbol.
+// Remove it once those prebuilts use getBnConstructorMap().
+extern DoNotDestruct<BnConstructorMap> gBnConstructorMap;
+// Legacy ABI declaration for vendor prebuilts that reference this data symbol.
+// Remove it once those prebuilts use getBsConstructorMap().
+extern DoNotDestruct<BsConstructorMap> gBsConstructorMap;
+
 // TODO(b/69122224): remove this once no prebuilts reference it
 extern DoNotDestruct<ConcurrentMap<wp<::android::hidl::base::V1_0::IBase>, SchedPrio>>
         gServicePrioMap;

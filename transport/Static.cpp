@@ -27,6 +27,10 @@ namespace android {
 namespace hardware {
 namespace details {
 
+// Legacy ABI storage for vendor prebuilts that still reference this data symbol.
+// Remove it with the fallback once those prebuilts use getBnConstructorMap().
+DoNotDestruct<BnConstructorMap> gBnConstructorMap{};
+
 DoNotDestruct<ConcurrentMap<const ::android::hidl::base::V1_0::IBase*,
                             wp<::android::hardware::BHwBinder>>>
         gBnMap{};
@@ -35,6 +39,12 @@ DoNotDestruct<ConcurrentMap<const ::android::hidl::base::V1_0::IBase*,
 DoNotDestruct<ConcurrentMap<wp<::android::hidl::base::V1_0::IBase>, SchedPrio>> gServicePrioMap{};
 DoNotDestruct<ConcurrentMap<wp<::android::hidl::base::V1_0::IBase>, bool>> gServiceSidMap{};
 
+// Legacy ABI storage for vendor prebuilts that still reference this data symbol.
+// Remove it with the fallback once those prebuilts use getBsConstructorMap().
+DoNotDestruct<BsConstructorMap> gBsConstructorMap{};
+
+// Function-local initialization avoids a cross-translation-unit initialization-order dependency
+// when HAL interface libraries register constructors during startup.
 BnConstructorMap& getBnConstructorMap() {
     static BnConstructorMap& map = *new BnConstructorMap();
     return map;

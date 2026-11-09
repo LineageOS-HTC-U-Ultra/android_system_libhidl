@@ -254,6 +254,11 @@ sp<IBinder> getOrCreateCachedBinder(::android::hidl::base::V1_0::IBase* ifacePtr
 
     if (sBnObj == nullptr) {
         auto func = details::getBnConstructorMap().get(descriptor, nullptr);
+        if (!func) {
+            // Older vendor prebuilts may still register constructors in the legacy map.
+            // Remove this fallback once they use getBnConstructorMap().
+            func = details::gBnConstructorMap->get(descriptor, nullptr);
+        }
         LOG_ALWAYS_FATAL_IF(func == nullptr, "%s getBnConstructorMap returned null for %s",
                             __func__, descriptor.c_str());
 

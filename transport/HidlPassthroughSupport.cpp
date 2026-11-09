@@ -29,6 +29,11 @@ namespace details {
 
 static sp<IBase> tryWrap(const std::string& descriptor, sp<IBase> iface) {
     auto func = getBsConstructorMap().get(descriptor, nullptr);
+    if (!func) {
+        // Older vendor prebuilts may still register constructors in the legacy map.
+        // Remove this fallback once they use getBsConstructorMap().
+        func = gBsConstructorMap->get(descriptor, nullptr);
+    }
     if (func) {
         return func(static_cast<void*>(iface.get()));
     }
